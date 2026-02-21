@@ -1,0 +1,12 @@
+{% extends 'music_portal/base.html' %}
+{% block content %}
+<section class="card auth-card">
+    <h1>Регистрация</h1>
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Зарегистрироваться</button>
+    </form>
+    <p class="muted">Уже зарегистрированы? <a href="{% url 'login' %}">Войти</a></p>
+</section>
+{% endblock %}

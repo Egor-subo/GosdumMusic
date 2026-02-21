@@ -1,0 +1,44 @@
+{% extends 'music_portal/base.html' %}
+{% block content %}
+<section class="card">
+    <div class="section-header">
+        <h1>Панель администратора</h1>
+        <a class="btn" href="{% url 'admin_logout' %}">Выйти</a>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Пользователь</th><th>Название</th><th>Дата</th><th>Жанр</th><th>Формат</th><th>Статус</th><th>Действие</th></tr>
+            </thead>
+            <tbody>
+            {% for item in requests %}
+                <tr>
+                    <td>{{ item.user.profile.full_name }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.event_date|date:'d.m.Y' }}</td>
+                    <td>{{ item.genre }}</td>
+                    <td>{{ item.participation_format }}</td>
+                    <td>{{ item.status }}</td>
+                    <td>
+                        <form method="post" class="inline-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="request_id" value="{{ item.id }}">
+                            <select name="status">
+                                <option {% if item.status == 'Новая' %}selected{% endif %}>Новая</option>
+                                <option {% if item.status == 'На рассмотрении' %}selected{% endif %}>На рассмотрении</option>
+                                <option {% if item.status == 'Одобрена' %}selected{% endif %}>Одобрена</option>
+                                <option {% if item.status == 'Отклонена' %}selected{% endif %}>Отклонена</option>
+                            </select>
+                            <button class="btn btn-small" type="submit">Сохранить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7">Пока нет заявок.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
